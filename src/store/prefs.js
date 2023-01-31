@@ -10,6 +10,7 @@ export const usePrefsStore = defineStore('prefs', {
     filterFn: [],
     useKind3: true,
     clientSideProcessing: false,
+    clientSideProcessingUser: false,
     latencyFast: 20,
     latencySlow: 1000,
     sortUptime: true,
@@ -23,6 +24,10 @@ export const usePrefsStore = defineStore('prefs', {
     getFilters: (state) => state.filterFn,
   },
   actions: {
+    setClientSideProcessing(value){
+      this.clientSideProcessing = value
+      this.clientSideProcessingUser = value
+    },
     enable(){ this.refresh = true },
     disable(){ this.refresh = false },
     toggleRefresh(){ this.refresh = !this.refresh },

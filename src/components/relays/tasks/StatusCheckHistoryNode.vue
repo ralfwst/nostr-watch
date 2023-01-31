@@ -57,7 +57,7 @@ const localMethods = {
 }
 
 export default defineComponent({
-  name: 'HistoryNodeStatus',
+  name: 'StatusCheckHistoryNode',
   components: {},
   data() {
     return {
