@@ -45,6 +45,8 @@
         </div>
 
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <StatusHistoryNode />
+
           <Preferences /> 
 
           <About />
@@ -162,6 +164,10 @@ import { defineComponent, defineAsyncComponent } from 'vue'
 import { setupStore } from '@/store'
 import UserLib from '@/shared/user-lib.js'
 
+const StatusHistoryNode = defineAsyncComponent(() =>
+    import("@/components/partials/StatusHistoryNode.vue" /* webpackChunkName: "StatusHistoryNode" */)
+);
+
 const Preferences = defineAsyncComponent(() =>
     import("@/components/user/UserQuickPreferences.vue" /* webpackChunkName: "UserQuickPreferences" */)
 );
@@ -185,6 +191,7 @@ export default defineComponent({
   name: 'HeaderComponent',
   components: {
     Preferences,
+    StatusHistoryNode,
     AuthComponent,
     DarkMode,
     About,

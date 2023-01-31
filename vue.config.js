@@ -3,7 +3,7 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin")
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-module.exports = defineConfig({
+const config = {
   transpileDependencies: true,
   
   devServer: {
@@ -26,7 +26,6 @@ module.exports = defineConfig({
     // },
     plugins: [
       new NodePolyfillPlugin(),
-      new CompressionPlugin,
       // new BundleAnalyzerPlugin()
     ],
     optimization: {
@@ -52,4 +51,9 @@ module.exports = defineConfig({
         .use('yaml-loader')
           .loader('yaml-loader')
   }
-})
+}
+
+if(process.env.PRODUCTION)
+  config.plugins.push(new CompressionPlugin)
+
+module.exports = defineConfig(config)

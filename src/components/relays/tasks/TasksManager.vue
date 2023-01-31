@@ -1,4 +1,5 @@
 <template>
+  <HistoryNodeStatus />
   <HeartbeatTask 
     v-bind:resultsProp="results" />
   <LoadSeed 
@@ -25,6 +26,7 @@ import LoadSeed from './LoadSeed.vue'
 import RefreshTask from './RefreshTask.vue'
 import HeartbeatTask from './HeartbeatTask.vue'
 import UserRelayList from './UserRelayList.vue'
+import HistoryNodeStatus from './HistoryNodeStatus.vue'
 
 // import RelayCanonicalsTask from './RelayCanonicalsTask.vue'
 // import RelayOperatorTask from './RelayOperatorTask.vue'
@@ -36,6 +38,7 @@ export default defineComponent({
     RefreshTask,
     HeartbeatTask,
     UserRelayList,
+    HistoryNodeStatus,
     // RelayCanonicalsTask,
     // RelayOperatorTask
   },
