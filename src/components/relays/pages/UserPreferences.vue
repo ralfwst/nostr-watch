@@ -6,8 +6,10 @@
     <form class="space-y-8 divide-y divide-gray-200">
       <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
         <div class="space-y-6 sm:space-y-5">
-          <div>
-            <h3 class="text-lg font-medium leading-6 text-gray-900 dark: text-gray-500">Preferences</h3>
+          <div class="mt-8 content-left">
+            <h1 class="align-left text-4xl capitalize font-semibold text-gray-900 dark:text-white/90">
+              User Preferences
+            </h1>
           </div>
             
             <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
@@ -25,12 +27,16 @@
                     class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
                   />
                 </Switch>
-                <p class="mt-2 text-sm text-gray-500">If enabled, checks will run client-side instead of pulling data from nostr.watch history node</p>
+                <p class="mt-2 text-sm text-gray-500">If enabled, checks will run client-side instead of pulling data from nostr.watch history node. The history node is faster, but less accurate, client-side processing is slower, but more accurate.</p>
               </div>
             </div>
 
-            <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
-              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">Auto refresh</label>
+            <div 
+              class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5"
+              v-if="store.prefs.clientSideProcessing">
+              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
+                Auto refresh
+              </label>
               <div class="mt-1 sm:col-span-2 sm:mt-0">
                 <Switch
                   v-model="store.prefs.refresh"
@@ -45,6 +51,43 @@
                   />
                 </Switch>
                 <p class="mt-2 text-sm text-gray-500">Automatically refresh</p>
+              </div>
+            </div>
+
+            <div 
+              class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5"
+              v-if="store.prefs.refresh && store.prefs.clientSideProcessing">
+              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
+                Refresh Interval
+              </label>
+              <div class="mt-1 sm:col-span-2 sm:mt-0">
+                <div class="mt-4 space-y-4">
+                  <div class="flex items-center">
+                    <input v-model="store.prefs.duration" :value="30*60*1000" id="push-everything" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700  dark:text-gray-500">30 minutes</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input v-model="store.prefs.duration" :value="1*60*60*1000" id="push-email" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700  dark:text-gray-500">1 hour</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input v-model="store.prefs.duration" :value="2*60*60*1000" id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-500">2 hours</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input v-model="store.prefs.duration" :value="6*60*60*1000" id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-500">6 hours</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input v-model="store.prefs.duration" :value="12*60*60*1000" id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-500">12 hours</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input v-model="store.prefs.duration" :value="24*60*60*1000" id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                    <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-500">24 hours</label>
+                  </div>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">How often should nostr.watch recheck relays?</p>
               </div>
             </div>
 

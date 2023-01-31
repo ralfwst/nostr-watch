@@ -8,7 +8,9 @@
     v-if="(geo instanceof Object)"
   />
 
-  <div id="wrapper" class="mt-8 mx-auto w-auto max-w-7xl">
+  {{ store.tasks.getActiveSlug }}
+
+  <div id="wrapper" class="mt-8 mx-auto w-auto max-w-7xl align-center content-center" style="text-align: center">
       <div v-if="store.tasks.isProcessing('relays/single') && !result" class="data-card flex bg-slate-100 mt-12 shadow py-8 px-3">
         <div class="text-slate-800 text-3xl flex-none w-full block py-1 text-center">
           <span class="block lg:text-lg"><strong>Data has not yet populated and is currently being processed.</strong> Depending on the availability of of the <strong>{{ relay }}</strong>, this may or may not be populated shortly.</span>

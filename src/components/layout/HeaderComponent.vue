@@ -45,6 +45,8 @@
         </div>
 
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <Preferences /> 
+
           <About />
 
           <DarkMode />
@@ -160,7 +162,9 @@ import { defineComponent, defineAsyncComponent } from 'vue'
 import { setupStore } from '@/store'
 import UserLib from '@/shared/user-lib.js'
 
-// import PreferencesComponent from '@/components/PreferencesComponent.vue'
+const Preferences = defineAsyncComponent(() =>
+    import("@/components/user/UserQuickPreferences.vue" /* webpackChunkName: "UserQuickPreferences" */)
+);
 
 const About = defineAsyncComponent(() =>
     import("@/components/partials/AboutNostrWatch.vue" /* webpackChunkName: "About" */)
@@ -180,7 +184,7 @@ export default defineComponent({
   title: "nostr.watch registry & network status",
   name: 'HeaderComponent',
   components: {
-    // PreferencesComponent,
+    Preferences,
     AuthComponent,
     DarkMode,
     About,

@@ -2,7 +2,8 @@
   <span 
     v-if="this.store.tasks.getActiveSlug === slug"
     class="text-white lg:text-sm mr-2 ml-2 mt-1.5 text-xs">
-    <span>Loading seed data...</span>
+    <span v-if="isSingle">Loading {{ relay }} from history node...</span>
+    <span v-if="!isSingle">Loading seed data...</span>
   </span>
 </template>
 
@@ -25,7 +26,7 @@ import { RelayPool } from 'nostr'
 import { geo } from '../../../../cache/geo.yaml'
 
 const localMethods = {
-  invalidate(force){
+  invalidate(force, single){
     // if( ( this.store.tasks.getLastUpdate('relays/check') || ( this.store.tasks.processed?.['relays/check'] && this.store.tasks.processed?.['relays/check'].length ) ) && !force ) 
     //   return
     if( !this.isExpired(this.slug, 15*60*1000) && !force ) 
@@ -41,7 +42,7 @@ const localMethods = {
           .on('open', relay => {
             relay.subscribe(subid, {
               kinds:    [30303],
-              "#d":     relays,
+              "#d":     single ? single : relays,
               authors:  ['b3b0d247f66bf40c4c9f4ce721abfe1fd3b7529fbc1ea5e64d5f0f8df3a4b6e6'],
             })
           })
@@ -78,6 +79,16 @@ const localMethods = {
       },
       true
     )
+  },
+  setRefreshInterval: function(){
+    clearInterval(this.interval)
+    this.interval = setInterval(() => {
+      if(!this.store.prefs.refresh )
+        return 
+
+      if(!this.store.tasks.isProcessing(this.slug) && !this.isSingle)
+        this.invalidate()
+    }, 1000)
   },
   timeUntilRefresh(){
     return this.timeSince(Date.now()-(this.store.tasks.getLastUpdate(this.slug)+this.store.prefs.duration-Date.now())) 
@@ -125,10 +136,16 @@ export default defineComponent({
   mounted(){
     console.log('is processing', this.store.tasks.isProcessing(this.slug))
 
-    if(this.store.tasks.isProcessing(this.slug))
-      this.invalidate(true)
-    else
-      this.invalidate()
+    if(this.isSingle)
+      this.invalidate(true, this.relayFromUrl)
+    else 
+      if(this.store.tasks.isProcessing(this.slug))
+        this.invalidate(true)
+      else
+        this.invalidate()
+
+    if(!this.store.prefs.clientSideProcessing)
+      this.setRefreshInterval()
   },
   updated(){},
   computed: Object.assign(SharedComputed, {

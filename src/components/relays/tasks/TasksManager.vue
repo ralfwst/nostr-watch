@@ -3,7 +3,7 @@
     v-bind:resultsProp="results" />
   <LoadSeed 
     v-bind:resultsProp="results"
-    v-if="!store.prefs.clientSideProcessing" />
+    v-if="!store.prefs.clientSideProcessing || isSingle" />
   <RefreshTask
     v-bind:resultsProp="results"
     v-if="store.prefs.clientSideProcessing || isSingle" />

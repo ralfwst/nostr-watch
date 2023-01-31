@@ -198,7 +198,7 @@ const localMethods = {
         }
       
       // if(this.isSingle)
-        opts.checkAverageLatency = true
+      opts.checkAverageLatency = true
       
       if(this.store.user.testEvent)
         opts.testEvent = this.store.user.testEvent
@@ -209,9 +209,12 @@ const localMethods = {
         .on('open', () => {
           if(!this.isSingle)
             return
-          this.results[this.relayFromUrl].latency.average = null
-          this.results[this.relayFromUrl].latency.min = null
-          this.results[this.relayFromUrl].latency.max = null
+          if(this.results?.[this.relayFromUrl]?.latency?.average)
+            this.results[this.relayFromUrl].latency.average = null
+          if(this.results?.[this.relayFromUrl]?.latency?.min)
+            this.results[this.relayFromUrl].latency.min = null
+          if(this.results?.[this.relayFromUrl]?.latency?.max)
+            this.results[this.relayFromUrl].latency.max = null
           this.setCache(this.results[this.relayFromUrl])
         })
         .on('complete', (instance) => {
@@ -317,7 +320,8 @@ export default defineComponent({
       else
         this.invalidate()
     }
-    this.setRefreshInterval()
+    if(this.store.prefs.clientSideProcessing)
+      this.setRefreshInterval()
   },
 
   updated(){},
