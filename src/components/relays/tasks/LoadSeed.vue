@@ -42,7 +42,7 @@ const localMethods = {
           .on('open', relay => {
             relay.subscribe(subid, {
               kinds:    [30303],
-              "#d":     single ? single : relays,
+              "#d":     single ? [ single ] : relays,
               authors:  ['b3b0d247f66bf40c4c9f4ce721abfe1fd3b7529fbc1ea5e64d5f0f8df3a4b6e6'],
             })
           })
@@ -63,8 +63,12 @@ const localMethods = {
                 uptime: this.getUptimePercentage(relay),
                 identities: []
               }
+              
               if(data.info?.pubkey)
                 result.identities.push(data.info?.pubkey)
+
+              if(data?.topics)
+                result.topics = data.topics
                 
               result.aggregate = this.getAggregate(result)
               this.results[relay] = result
@@ -136,13 +140,15 @@ export default defineComponent({
   mounted(){
     console.log('is processing', this.store.tasks.isProcessing(this.slug))
 
-    if(this.isSingle)
+    if(this.isSingle) {
       this.invalidate(true, this.relayFromUrl)
-    else 
+    }  
+    else {
       if(this.store.tasks.isProcessing(this.slug))
         this.invalidate(true)
       else
         this.invalidate()
+    }
 
     if(!this.store.prefs.clientSideProcessing)
       this.setRefreshInterval()

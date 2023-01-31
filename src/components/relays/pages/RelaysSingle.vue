@@ -160,7 +160,7 @@
 
 
         <div class="flex-none lg:flex mb-8">
-          <div class="flex-none lg:flex-1 justify-center mb-6 lg:mb-0">
+          <div class="flex-none lg:flex-1 justify-center mb-6 lg:mb-0"  v-if="geo">
             <div class="inline-block rounded-lg shadow-lg h-auto lg:h-full bg-white dark:bg-black/30 max-w-sm text-center">
               <!-- <div class="py-3 px-6 border-b border-gray-300">
                 Featured
@@ -181,7 +181,7 @@
               </div> -->
             </div>
           </div>
-          <div class="flex-none lg:flex-1 justify-center mb-6 lg:mb-0" v-if="result?.info">
+          <div class="flex-none lg:flex-1 justify-center mb-6 lg:mb-0" v-if="Object.keys(result?.info).length">
             <div class="inline-block rounded-lg shadow-lg h-auto lg:h-full bg-white dark:bg-black/30 max-w-sm text-center">
               <!-- <div class="py-3 px-6 border-b border-gray-300">
                 Featured
@@ -732,7 +732,9 @@ export default defineComponent({
     },
     normalizeLatency: function(){
       return value =>  { 
-        return (value-0) / (1000-0) * 100
+        const fast = this.store.prefs.latencyFast,
+              slow = this.store.prefs.latencySlow
+        return (value-fast) / (slow-fast) * 100
       }
     },
     getUptimeTickClass: function(){

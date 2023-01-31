@@ -86,17 +86,11 @@ export const useTaskStore = defineStore(
     },
     //legacy
     startProcessing(job) { 
-      if(typeof key === 'undefined'){
-        console.log('stuff', this)
-      }
       this.addJob(job)
       this.processing[job.id] = true 
       this.currentTask = job.id
     },
     finishProcessing(key) { 
-      if(typeof key === 'undefined'){
-        console.log('stuff', this)
-      }
       this.processed[key] = new Array()
       this.processing[key] = false 
       this.currentTask = null
