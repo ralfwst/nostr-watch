@@ -11,10 +11,11 @@ export const usePrefsStore = defineStore('prefs', {
     useKind3: true,
     clientSideProcessing: false,
     clientSideProcessingUser: false,
-    latencyFast: 20,
+    latencyFast: 200,
     latencySlow: 1000,
     sortUptime: true,
     sortLatency: true, 
+    autoDetectRegion: true,
   }),
   getters: {
     doRefresh: (state) => state.refresh,

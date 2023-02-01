@@ -40,6 +40,7 @@ const localMethods = {
         const subid = crypto.randomBytes(40).toString('hex')
         pool
           .on('open', relay => {
+            console.log('subscribing')
             relay.subscribe(subid, {
               kinds:    [30303],
               "#d":     single ? [ single ] : relays,

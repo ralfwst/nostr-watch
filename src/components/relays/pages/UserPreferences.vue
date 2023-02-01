@@ -119,10 +119,11 @@
               <div class="mt-1 sm:col-span-2 sm:mt-0 align-left">
                 {{ store.prefs.latencyFast }}
                 <input 
+                  id="latencyFast-range"
                   v-model="store.prefs.latencyFast"
-                  class="rounded-lg overflow-hidden appearance-none bg-gray-400 h-3 w-128" 
-                  type="range" min="1" max="500" step="1" />
-                <p class="mt-2 text-sm text-gray-500">What should nostr.watch consider as a fast latency?</p>
+                  class="rounded-lg overflow-hidden appearance-none bg-gray-500 h-3 w-128" 
+                  type="range" min="20" max="400" step="1" />
+                <p class="mt-2 text-sm text-gray-500">What maximum ping should nostr.watch consider as a fast latency? (latency below is considered fast)</p>
               </div>
             </div>
 
@@ -134,9 +135,9 @@
                 {{ store.prefs.latencySlow }}
                 <input 
                   v-model="store.prefs.latencySlow"
-                  class="rounded-lg overflow-hidden appearance-none bg-gray-400 h-3 w-128" 
-                  type="range" min="500" max="5000" step="1"/>
-                <p class="mt-2 text-sm text-gray-500">What should nostr.watch consider as a slow latency?</p>
+                  class="rounded-lg overflow-hidden appearance-none bg-red-500 h-3 w-128" 
+                  type="range" min="1000" max="5000" step="1"/>
+                <p class="mt-2 text-sm text-gray-500">What ping minimum should nostr.watch consider as slow latency? (latency above is considered slow)</p>
               </div>
             </div>
           </div>
@@ -206,6 +207,13 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+#latencyFast-range::-webkit-slider-thumb,
+#latencyFast-range::-webkit-slider-runnable-track {
+  @apply bg-green-500
+}
+
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
      
      input[type="range"]::-webkit-slider-thumb {

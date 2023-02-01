@@ -7,7 +7,6 @@
     :result="result"
     v-if="(geo instanceof Object)"
   />
-  {{ store.tasks.getActiveSlug }}
 
   <div id="wrapper" class="mt-8 mx-auto w-auto max-w-7xl align-center content-center" style="text-align: center">
       <div v-if="store.tasks.isProcessing('relays/single') && !result" class="data-card flex bg-slate-100 dark:bg-black/20 dark:text-white/50 mt-12 shadow py-8 px-3">
@@ -37,7 +36,13 @@
             <span>{{key}}</span>  
           </div>
         </div>
-        <div id="status" class="flex-none w-full md:w-auto md:flex mb-2 py-5" v-if="showLatency && (result.check.averageLatency === null || result.check.averageLatency === true)"> <!--something is weird here with margin-->
+
+        <div 
+          id="status" 
+          class="flex-none w-full md:w-auto md:flex mb-2 py-5" 
+          v-if="
+            showLatency && 
+            (result.check.averageLatency === null || result.check.averageLatency === true)"> <!--something is weird here with margin-->
           <div class="text-white text-lg md:text-xl lg:text-3xl flex-1 block py-6 ">
             <vue-gauge 
               v-if="result.latency.average"
@@ -706,7 +711,6 @@ export default defineComponent({
       this.result.latency.max = null
       this.showLatency = true 
     }
-
     this.interval = setInterval(() => {
       this.setData()
     },1000)
@@ -759,14 +763,16 @@ export default defineComponent({
         const m = 32 - h 
 
         let color 
+
+        console.log('norm uptime debug', heartbeat.latency, '<', this.store.prefs.slowLatency, (this.store.prefs.slowLatency/2))
         
-        if(heartbeat.latency<200) {
+        if(heartbeat.latency<this.store.prefs.latencyFast) {
           color = 'bg-green-400/60'
         } 
-        else if(heartbeat.latency<500) {
+        else if(heartbeat.latency<(this.store.prefs.latencySlow/2)) {
           color = 'bg-yellow-400/50'
         }
-        else if(heartbeat.latency<1000) {
+        else if(heartbeat.latency<this.store.prefs.latencySlow) {
           color = 'bg-orange-400/50'
         }
         else {

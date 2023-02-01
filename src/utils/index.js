@@ -22,3 +22,12 @@ export const timeSince = function(date) {
   }
   return Math.floor(seconds) + " seconds";
 }
+
+export const getVisitorGeo = async function() {
+  let geo
+  await fetch(`http://ip-api.com/json/?fields=ip,lat,lon`, { headers: { 'accept': 'application/dns-json' } })
+          .then(response => response.json())
+          .then((data) => { geo = data })
+          .catch(err => console.error('./scripts/geo.js', err))
+  return geo;
+}

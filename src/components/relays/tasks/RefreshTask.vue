@@ -84,8 +84,8 @@ const localMethods = {
   setRefreshInterval: function(){
     clearInterval(this.interval)
     this.interval = setInterval(() => {
-      if(!this.store.prefs.refresh )
-        return 
+      if(!this.store.prefs.refresh || !this.store.prefs.clientSideProcessing)
+        return
       
       this.untilNext = this.timeUntilRefresh()
       this.sinceLast = this.timeSinceRefresh()
@@ -164,8 +164,26 @@ const localMethods = {
     
     if(result)  {
       // console.log('whoops', result)
+      result = {
+                url: relay,
+                check: {
+                  connect: result.check.connect,
+                  read: result.check.read,
+                  write: result.check.write,
+                  latency: result.check.latency,
+                  averageLatency: result.check.averageLatency
+                },
+                latency: result?.latency,
+                info: result.info,
+                uptime: this.getUptimePercentage(relay),
+                identities: []
+              }
+              
+      if(result.info?.pubkey)
+        result.identities.push(result.info.pubkey)
+
       this.setCache(Object.assign({}, this.results[relay], result))
-      this.setUptimePercentage(relay)
+      // this.setUptimePercentage(relay)
       this.results[relay] = this.getCache(relay)
     }
 
@@ -213,12 +231,12 @@ const localMethods = {
         .on('open', () => {
           if(!this.isSingle)
             return
-          if(this.results?.[this.relayFromUrl]?.latency?.average)
-            this.results[this.relayFromUrl].latency.average = null
-          if(this.results?.[this.relayFromUrl]?.latency?.min)
-            this.results[this.relayFromUrl].latency.min = null
-          if(this.results?.[this.relayFromUrl]?.latency?.max)
-            this.results[this.relayFromUrl].latency.max = null
+          // if(this.results?.[this.relayFromUrl]?.latency?.average)
+          //   this.results[this.relayFromUrl].latency.average = null
+          // if(this.results?.[this.relayFromUrl]?.latency?.min)
+          //   this.results[this.relayFromUrl].latency.min = null
+          // if(this.results?.[this.relayFromUrl]?.latency?.max)
+          //   this.results[this.relayFromUrl].latency.max = null
           this.setCache(this.results[this.relayFromUrl])
         })
         .on('complete', (instance) => {
@@ -324,7 +342,7 @@ export default defineComponent({
       else
         this.invalidate()
     }
-    if(this.store.prefs.clientSideProcessing)
+    if(this.store.prefs.clientSideProcessing && !this.isSingle)
       this.setRefreshInterval()
   },
 

@@ -1,7 +1,7 @@
 <template>
+  <DetectRegion />
   <StatusCheckHistoryNode />
-  <HeartbeatTask 
-    v-bind:resultsProp="results" />
+  <HeartbeatTask />
   <LoadSeed 
     v-bind:resultsProp="results"
     v-if="!store.prefs.clientSideProcessing || isSingle" />
@@ -22,6 +22,7 @@ import { setupStore } from '@/store'
 
 import SharedComputed from '@/shared/computed.js'
 
+import DetectRegion from './DetectRegion.vue'
 import LoadSeed from './LoadSeed.vue'
 import RefreshTask from './RefreshTask.vue'
 import HeartbeatTask from './HeartbeatTask.vue'
@@ -34,6 +35,7 @@ import StatusCheckHistoryNode from './StatusCheckHistoryNode.vue'
 export default defineComponent({
   name: "TasksManager",
   components: {
+    DetectRegion,
     LoadSeed,
     RefreshTask,
     HeartbeatTask,
