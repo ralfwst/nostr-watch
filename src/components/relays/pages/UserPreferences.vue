@@ -11,7 +11,9 @@
               User Preferences
             </h1>
           </div>
-            
+
+
+            <h2 class="text-gray-500 dark:text-white/50 mt-4">Relay Data</h2>  
             <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
               <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">Client-side processing</label>
               <div class="mt-1 sm:col-span-2 sm:mt-0">
@@ -93,6 +95,57 @@
 
             <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
               <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
+                Auto-detect Region
+              </label>
+              <div class="mt-1 sm:col-span-2 sm:mt-0">
+                <Switch
+                  v-model="store.prefs.autoDetectRegion"
+                  :class="store.prefs.autoDetectRegion ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-black'"
+                  class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                >
+                  <span class="sr-only">Auto-detect Region</span>
+                  <span
+                    aria-hidden="true"
+                    :class="store.prefs.autoDetectRegion ? 'translate-x-5' : 'translate-x-0'"
+                    class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                  />
+                </Switch>
+                <p class="mt-2 text-sm text-gray-500">If enabled, checks will run client-side instead of pulling data from nostr.watch history node. The history node is faster, but less accurate, client-side processing is slower, but more accurate.</p>
+              </div>
+            </div>
+
+            <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5" v-if="!store.prefs.autoDetectRegion">
+              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
+                Auto-detect Region
+              </label>
+              <div class="mt-1 sm:col-span-2 sm:mt-0">
+                <div class="flex items-center">
+                  <input v-model="store.prefs.region" value="us-east" id="push-everything" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <label for="push-everything" class="ml-3 block text-sm font-medium text-gray-700  dark:text-gray-500">us-east</label>
+                </div>
+                <div class="flex items-center">
+                  <input v-model="store.prefs.region" value="eu-west" id="push-email" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700  dark:text-gray-500">eu-west</label>
+                </div>
+                <div class="flex items-center">
+                  <input v-model="store.prefs.region" value="asia-south" id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-500">asia-south</label>
+                </div>
+                <div class="flex items-center">
+                  <input v-model="store.prefs.region" value="asia-southeast" id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-500">asia-southeast</label>
+                </div>
+                <div class="flex items-center">
+                  <input v-model="store.prefs.region" value="au" id="push-nothing" name="push-notifications" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                  <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-500">australia</label>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">If enabled, checks will run client-side instead of pulling data from nostr.watch history node. The history node is faster, but less accurate, client-side processing is slower, but more accurate.</p>
+              </div>
+            </div>
+
+            <h2 class="text-gray-500 dark:text-white/50 mt-4">Sorting</h2>
+            <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
+              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
                 Pin Favorites
               </label>
               <div class="mt-1 sm:col-span-2 sm:mt-0 align-left">
@@ -112,6 +165,49 @@
               </div>
             </div>
 
+            <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
+              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
+                Uptime Sorting
+              </label>
+              <div class="mt-1 sm:col-span-2 sm:mt-0 align-left">
+                <Switch
+                  v-model="store.prefs.sortingUptime"
+                  :class="store.prefs.sortingUptime ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-black'"
+                  class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                >
+                  <span class="sr-only">Uptime Sorting</span>
+                  <span
+                    aria-hidden="true"
+                    :class="store.prefs.sortingUptime ? 'translate-x-5' : 'translate-x-0'"
+                    class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                  />
+                </Switch>
+                <p class="mt-2 text-sm text-gray-500">If enabled, uptime values will be used in multi-dimensional sorting</p>
+              </div>
+            </div>
+
+            <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
+              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
+                Latency Sorting
+              </label>
+              <div class="mt-1 sm:col-span-2 sm:mt-0 align-left">
+                <Switch
+                  v-model="store.prefs.sortingLatency"
+                  :class="store.prefs.sortingLatency ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-black'"
+                  class="relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                >
+                  <span class="sr-only">Latency Sorting</span>
+                  <span
+                    aria-hidden="true"
+                    :class="store.prefs.sortingLatency ? 'translate-x-5' : 'translate-x-0'"
+                    class="pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                  />
+                </Switch>
+                <p class="mt-2 text-sm text-gray-500">If enabled, uptime values will be used in multi-dimensional sorting</p>
+              </div>
+            </div>
+
+            <h2 class="text-gray-500 dark:text-white/50 mt-4">Personalization</h2>
             <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
               <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
                 Fast Latency  (default: 20)
@@ -138,6 +234,16 @@
                   class="rounded-lg overflow-hidden appearance-none bg-red-500 h-3 w-128" 
                   type="range" min="1000" max="5000" step="1"/>
                 <p class="mt-2 text-sm text-gray-500">What ping minimum should nostr.watch consider as slow latency? (latency above is considered slow)</p>
+              </div>
+            </div>
+
+            <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 dark:sm:border-slate-800 sm:pt-5">
+              <label for="about" class="block text-sm font-medium text-gray-700 dark:text-gray-300 sm:mt-px sm:pt-2">
+                Ignore Topics
+              </label>
+              <div class="mt-1 sm:col-span-2 sm:mt-0">
+                <textarea id="about" name="about" rows="3" class="py-2 px-3 block w-full max-w-lg rounded-md border-gray-300 dark:bg-black/30 dark:text-white/60 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" v-model="store.prefs.ignoreTopics" />
+                <p class="mt-2 text-sm text-gray-500">Comma separated list, defaults are there because they are OP</p>
               </div>
             </div>
           </div>
@@ -177,8 +283,10 @@ export default defineComponent({
   props: {
   },
 
-  data() {
+  data() {  
     return {
+      currentRegion: this.store.prefs.region,
+      autoDetectRegion: this.store.prefs.autoDetectRegion
     }
   },
 
@@ -194,7 +302,14 @@ export default defineComponent({
   },
 
   async mounted() {
-
+    this.interval = setInterval(() => {
+      if(this.store.prefs.region !== this.currentRegion || this.store.prefs.autoDetectRegion !== this.autoDetectRegion){
+        delete this.store.tasks.lastUpdate['relays/seed']
+        delete this.store.tasks.lastUpdate['user/region']
+        this.currentRegion = this.store.prefs.region
+        this.autoDetectRegion = this.store.prefs.autoDetectRegion
+      }
+    },100)
   },
 
   computed: Object.assign(SharedComputed, {

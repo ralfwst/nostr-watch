@@ -31,6 +31,15 @@
           </a>
         </div>
 
+
+        <div class="data-card flex sm:rounded-lg bg-slate-50 dark:bg-black/20 border-slate-200 border mb-8  py-8" v-if="result?.topics && result?.topics.length">
+          <div class="text-slate-800 text-lg md:text-xl lg:text-3xl flex-none w-full block py-1 text-center">
+            <span v-for="topic in getTopics" :class="normalizeTopic(topic)" :key="`${result.url}-${topic[0]}`">
+              #{{ topic[0] }}  
+            </span>
+          </div>
+        </div>
+
         <div id="status" class="flex mb-2 py-5 rounded-lg"> <!--something is weird here with margin-->
           <div v-for="key in ['connect', 'read', 'write']" :key="key" class="text-white text-lg md:text-xl lg:text-2xl flex-1 block py-3" :class="check(key)">
             <span>{{key}}</span>  
@@ -110,8 +119,6 @@
               </span>
           </div>
         </div>
-
-        
 
         <!-- <div class="flex justify-center">
           <div class="block rounded-lg shadow-lg bg-white max-w-sm text-center">
@@ -706,10 +713,14 @@ export default defineComponent({
     // this.getAdminNotes()
     this.result = this.getCache(this.relayFromUrl)
     if(this.result){
-      this.result.latency.average = null
-      this.result.latency.min = null
-      this.result.latency.max = null
-      this.showLatency = true 
+      if(this.result?.latency?.average)
+        this.result.latency.average = null
+      if(this.result?.latency?.min)
+        this.result.latency.min = null
+      if(this.result?.latency?.max)
+        this.result.latency.max = null
+      if(this.result?.latency?.average)
+        this.showLatency = true 
     }
     this.interval = setInterval(() => {
       this.setData()
@@ -721,6 +732,33 @@ export default defineComponent({
   },
 
   computed: Object.assign(SharedComputed, {
+    getTopics: function(){
+      // return this.result.topics.filter( topic => !this.store.prefs.ignoreTopics.split(',').includes(topic[0]) )
+      return this.result.topics
+    },
+    normalizeTopic: function(){
+      return topic => {
+
+        const val = topic[1],
+              minVal = this.result.topics[this.result.topics.length-1][1], 
+              maxVal = this.result.topics[0][1],
+              newMin = 1,
+              newMax = 5
+
+        const size = Math.round( newMin + (val - minVal) * (newMax - newMin) / (maxVal - minVal))
+
+        if(size === 1)
+          return 'text-lg'
+        if(size === 2)
+          return 'text-1xl'
+        if(size === 3)
+          return 'text-2xl'
+        if(size === 4)
+          return 'text-3xl'
+        if(size === 5)
+          return 'text-4xl'
+      }
+    },
     getLocalTime: function(){
       let options = {
         timeZone: this.geo?.timezone,
@@ -763,8 +801,6 @@ export default defineComponent({
         const m = 32 - h 
 
         let color 
-
-        console.log('norm uptime debug', heartbeat.latency, '<', this.store.prefs.slowLatency, (this.store.prefs.slowLatency/2))
         
         if(heartbeat.latency<this.store.prefs.latencyFast) {
           color = 'bg-green-400/60'
@@ -877,6 +913,8 @@ export default defineComponent({
       this.heartbeats = this.store.stats.getHeartbeat(this.relay)
       this.hbMin = Math.min.apply(Math, this.heartbeats?.map( hb => hb.latency ))
       this.hbMax = Math.max.apply(Math, this.heartbeats?.map( hb => hb.latency ) )
+      if(this.result?.topics)
+        this.result.topics = this.result.topics.filter( topic => !this.store.prefs.ignoreTopics.split(',').includes(topic[0]) )
       //console.log(this.relay, this.lastUpdate, this.result, this.geo)
     }
   }),

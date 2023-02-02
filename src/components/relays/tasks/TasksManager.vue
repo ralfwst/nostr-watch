@@ -1,5 +1,6 @@
 <template>
-  <DetectRegion />
+  <DetectRegion 
+    v-if="store.prefs.autoDetectRegion" />
   <StatusCheckHistoryNode />
   <HeartbeatTask />
   <LoadSeed 

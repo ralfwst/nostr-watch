@@ -12,6 +12,9 @@
       </span>
       History Relay
     </span>
+    <span class="text-white inline-block lg:text-sm ml-2 mr-3 text-xs">
+      Region: {{ store.prefs.region }}
+    </span>
   </span>
 </template>
 

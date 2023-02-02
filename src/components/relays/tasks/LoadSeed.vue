@@ -48,7 +48,9 @@ const localMethods = {
             })
           })
           .on('event', (relay, sub_id, event) => {
+            console.log(event)
             if(subid === sub_id){
+              console.log(event)
               console.log(total++)
               const relay = event.tags[0][1]
               const data = JSON.parse(event.content)
@@ -59,7 +61,7 @@ const localMethods = {
                   read: data.read,
                   write: data.write,
                 },
-                latency: data?.latency,
+                latency: data?.latency[this.store.prefs.region],
                 info: data.info,
                 uptime: this.getUptimePercentage(relay),
                 identities: []
@@ -69,7 +71,7 @@ const localMethods = {
                 result.identities.push(data.info?.pubkey)
 
               if(data?.topics)
-                result.topics = data.topics
+                result.topics = data.topics.filter( topic => !this.store.prefs.ignoreTopics.split(',').includes(topic[0]) )
                 
               result.aggregate = this.getAggregate(result)
               this.results[relay] = result

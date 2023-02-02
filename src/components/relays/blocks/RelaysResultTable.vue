@@ -154,7 +154,7 @@
                       </td> -->
 
                       <td class="w-24 latency text-center text-sm font-bold">
-                        <span>{{ results[relay]?.latency?.average }}<span v-if="results[relay]?.latency.average">ms</span></span>
+                        <span>{{ results[relay]?.latency?.average }}<span v-if="results[relay]?.latency?.average">ms</span></span>
                       </td>
 
                       <!-- no editor -->
